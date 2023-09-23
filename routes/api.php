@@ -24,6 +24,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('changelog', ChangeLogController::class);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/updatepassword', [AuthController::class, 'updatepassword']);
+    Route::post('/updatedata', [AuthController::class, 'updatedata']);
 });
 
 // Route::get('/changelog', [ChangeLogController::class, 'index']);

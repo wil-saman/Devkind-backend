@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ChangeLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -12,14 +13,12 @@ class AuthController extends Controller
     public function register(Request $request) {
         $fields = $request->validate([
             'name' => 'required|string',
-            'phoneNumber' => 'required|string',
-            'email' => 'required|string|unique:users,email',
+            'email' => 'required|email|string|unique:users,email',
             'password' => 'required|string|confirmed'
         ]);
 
         $user = User::create([
             'name' => $fields['name'],
-            'phoneNumber' => $fields['phoneNumber'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password'])
         ]);
@@ -36,7 +35,7 @@ class AuthController extends Controller
 
     public function login(Request $request) {
         $fields = $request->validate([
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string'
         ]);
 
@@ -66,5 +65,37 @@ class AuthController extends Controller
         return [
             'message' => 'Logged out'
         ];
+    }
+
+    public function updatePassword(Request $request) {
+        $request->validate([
+            'old_password' => 'required|string',
+            'new_password' => 'required|confirmed|string',
+        ]);
+
+
+        if(!Hash::check($request->old_password, auth()->user()->password)){
+            return back()->with("error", "Old Password Doesn't match!");
+        }
+
+        User::whereId(auth()->user()->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return response("success", 201);
+    }
+
+    public function updateData(Request $request) {
+        $request->validate([
+            'name' =>'string',
+            'email'=>'required|email|string|max:255'
+        ]);
+
+        $user = auth()->user();
+        $user->name = $request['name'];
+        $user->email = $request['email'];
+        $user->save();
+
+        return back()->with('message','Profile Updated');
     }
 }
