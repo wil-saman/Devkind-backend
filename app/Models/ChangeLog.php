@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ChangeLog extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'userId',
+        'changedItem',
+        'oldValue',
+        'newValue'
+    ];
 }
