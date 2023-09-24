@@ -23,7 +23,9 @@ Route::post('/currentUser', [AuthController::class, 'getCurrentUser']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::resource('changelog', ChangeLogController::class);
+    // Route::resource('changelog', ChangeLogController::class);
+    Route::get('/changelog', [ChangeLogController::class, 'index']);
+    Route::post('/changelog', [ChangeLogController::class, 'store']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/updatepassword', [AuthController::class, 'updatepassword']);
     Route::post('/updatedata', [AuthController::class, 'updatedata']);

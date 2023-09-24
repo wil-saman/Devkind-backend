@@ -10,9 +10,13 @@ class ChangeLogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ChangeLog::all();
+        $request->validate([
+            'userId' => 'required|string',
+        ]);
+        
+        return ChangeLog::where('userId', $request['userId'])->get();
     }
 
     /**
