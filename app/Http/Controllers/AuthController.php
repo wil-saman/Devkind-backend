@@ -67,6 +67,27 @@ class AuthController extends Controller
         ];
     }
 
+    public function getCurrentUser(Request $request) {
+        $fields = $request->validate([
+            'currentToken' => 'required|string',
+        ]);
+
+        if(!\Laravel\Sanctum\PersonalAccessToken::findToken($fields['currentToken'])) {
+            return response([
+                'message' => 'Error! Access Token doesnt exist'
+            ], 401);
+        }
+
+        // Fetch the associated token Model
+        $token = \Laravel\Sanctum\PersonalAccessToken::findToken($fields['currentToken']);
+
+        // Get the assigned user
+        $user = $token->tokenable;
+
+        return $user;
+    
+    }
+
     public function updatePassword(Request $request) {
         $request->validate([
             'old_password' => 'required|string',
