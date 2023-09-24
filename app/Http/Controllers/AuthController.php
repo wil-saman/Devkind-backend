@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\User;
 use App\Models\ChangeLog;
 use Illuminate\Http\Request;
@@ -89,34 +90,88 @@ class AuthController extends Controller
     }
 
     public function updatePassword(Request $request) {
-        $request->validate([
+        $fields = $request->validate([
+            'email' => 'required|string',
             'old_password' => 'required|string',
             'new_password' => 'required|confirmed|string',
         ]);
 
+        // get email
+        $user = User::where('email', $fields['email'])->first();
 
-        if(!Hash::check($request->old_password, auth()->user()->password)){
-            return back()->with("error", "Old Password Doesn't match!");
+
+        if(!Hash::check($fields['old_password'], $user->password)){
+            return response([
+                'message' => 'Old password doesnt match!'
+            ], 401);
         }
 
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 
-        return response("success", 201);
+        DB::table('change_logs')->insert(
+            array(
+                   'userId'     =>   $user->id, 
+                   'changedItem'   =>   'password',
+                   'oldValue'   =>   $fields['old_password'],
+                   'newValue'   =>   $fields['new_password'],
+            )
+        );
+
+        return response("Success", 201);
     }
 
-    public function updateData(Request $request) {
-        $request->validate([
-            'name' =>'string',
-            'email'=>'required|email|string|max:255'
+    public function updateEmail(Request $request) {
+       $fields =  $request->validate([
+        // 'id'=>'string|required',
+        'email'=>'email|string|required'
+    ]);
+
+        // get user
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $oldEmail = $user->email;
+
+        User::whereId(auth()->user()->id)->update([
+            'email' => $fields['email']
         ]);
 
-        $user = auth()->user();
-        $user->name = $request['name'];
-        $user->email = $request['email'];
-        $user->save();
+        DB::table('change_logs')->insert(
+            array(
+                   'userId'     =>   $user->id, 
+                   'changedItem'   =>   'email',
+                   'oldValue'   =>   $oldEmail,
+                   'newValue'   =>   $fields['email'],
+            )
+        );
 
-        return back()->with('message','Profile Updated');
+        return response("Success", 201);
     }
+
+    public function updateName(Request $request) {
+        $fields =  $request->validate([
+                'name' =>'string|required'
+            ]);
+
+        // get user
+        $user = User::where('id', auth()->user()->id)->first();
+
+        $oldName = $user->name;
+ 
+         User::whereId(auth()->user()->id)->update([
+             'name' => $fields['name']
+         ]);
+
+         DB::table('change_logs')->insert(
+            array(
+                   'userId'     =>   $user->id, 
+                   'changedItem'   =>   'name',
+                   'oldValue'   =>   $oldName,
+                   'newValue'   =>   $fields['name'],
+            )
+        );
+ 
+         return response("Success", 201);
+     }
 }

@@ -27,8 +27,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/changelog', [ChangeLogController::class, 'index']);
     Route::post('/changelog', [ChangeLogController::class, 'store']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/updatepassword', [AuthController::class, 'updatepassword']);
-    Route::post('/updatedata', [AuthController::class, 'updatedata']);
+    Route::post('/updatePassword', [AuthController::class, 'updatePassword']);
+    Route::post('/updateEmail', [AuthController::class, 'updateEmail']);
+    Route::post('/updateName', [AuthController::class, 'updateName']);
 });
 
 // Route::get('/changelog', [ChangeLogController::class, 'index']);
