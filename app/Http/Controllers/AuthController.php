@@ -110,16 +110,16 @@ class AuthController extends Controller
             'password' => Hash::make($request->new_password)
         ]);
 
-        DB::table('change_logs')->insert(
-            array(
-                   'userId'     =>   $user->id, 
-                   'changedItem'   =>   'password',
-                   'oldValue'   =>   $fields['old_password'],
-                   'newValue'   =>   $fields['new_password'],
-            )
+        $finalVal =  array(
+            'userId'     =>   $user->id, 
+            'changedItem'   =>   'password',
+            'oldValue'   =>   $fields['old_password'],
+            'newValue'   =>   $fields['new_password'],
         );
 
-        return response("Success", 201);
+        DB::table('change_logs')->insert($finalVal);
+
+        return response($finalVal, 201);
     }
 
     public function updateEmail(Request $request) {
@@ -137,16 +137,16 @@ class AuthController extends Controller
             'email' => $fields['email']
         ]);
 
-        DB::table('change_logs')->insert(
-            array(
-                   'userId'     =>   $user->id, 
-                   'changedItem'   =>   'email',
-                   'oldValue'   =>   $oldEmail,
-                   'newValue'   =>   $fields['email'],
-            )
+        $finalVal = array(
+            'userId'     =>   $user->id, 
+            'changedItem'   =>   'email',
+            'oldValue'   =>   $oldEmail,
+            'newValue'   =>   $fields['email'],
         );
 
-        return response("Success", 201);
+        DB::table('change_logs')->insert($finalVal);
+
+        return response($finalVal, 201);
     }
 
     public function updateName(Request $request) {
@@ -163,15 +163,15 @@ class AuthController extends Controller
              'name' => $fields['name']
          ]);
 
-         DB::table('change_logs')->insert(
-            array(
-                   'userId'     =>   $user->id, 
-                   'changedItem'   =>   'name',
-                   'oldValue'   =>   $oldName,
-                   'newValue'   =>   $fields['name'],
-            )
-        );
+         $finalVal = array(
+            'userId'     =>   $user->id, 
+            'changedItem'   =>   'name',
+            'oldValue'   =>   $oldName,
+            'newValue'   =>   $fields['name'],
+         );
+
+         DB::table('change_logs')->insert($finalVal);
  
-         return response("Success", 201);
+         return response($finalVal, 201);
      }
 }
