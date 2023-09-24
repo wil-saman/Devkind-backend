@@ -20,7 +20,7 @@ Laravel Sanctum
 - run 'composer install' to install all required dependencies
 - run 'cp .env.example .env'
 - run 'php artisan key:generate'
-- run 'php artisan migrate'
+- run 'php artisan migrate' (If you got an error here, it is most likely that you have not uncommented the required extensions)
 - run 'php artisan serve'
 - run 'composer artisan serve' to start the server
 
