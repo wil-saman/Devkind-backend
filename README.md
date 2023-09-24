@@ -1,4 +1,4 @@
-# Devkind Frontend
+# Devkind Backend
 
 This project aims to create an authentication system that allows users to register and log in to their accounts.
 
