@@ -23,6 +23,7 @@ Laravel Sanctum
 - open .env file and replace the value for DB_CONNECTION to "sqlite" (in line 11)
 - remove "DB_DATABASE", "DB_USERNAME", and "DB_PASSWORD" from the .env file (line 14,15 and 16 respectively)
 - run 'php artisan migrate' (If you got an error here, it is most likely that you have not uncommented the required extensions)
+- enter "yes" on the prompt "would you like to create it?"
 - run 'php artisan serve'
 - run 'composer artisan serve' to start the server
 
