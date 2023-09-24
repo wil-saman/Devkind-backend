@@ -26,7 +26,12 @@ Laravel Sanctum
 
 ## Things that have been done in the project
 
-- ...
-- ...
-- ...
+- Learning basics of laravel - 5 hours
+- Setting up the project - 1 hour
+- Worked on "Changelog" model - 1 hour
+- Worked on "Changelog" api route and controllers - 30 mins
+- Worked on auth controllers and protected routes using laravel sanctum - 3 hour
+- Worked on logout controller - 2 hour
+- Worked on update password and update data - 4 hours
+
 
